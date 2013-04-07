@@ -74,7 +74,7 @@ case class SpecificTime(hour: Int, minute: Int, seconds: Int, millis: Int) exten
 
 /** The specially designated time instant 'now'. @see http://www.ietf.org/rfc/rfc2326.txt */
 case object Now extends NormalPlayTime {
-  def value: Long = error("No 'value' in milliseconds for Now")
+  def value: Long = sys.error("No 'value' in milliseconds for Now")
   
   def isNow = true
   

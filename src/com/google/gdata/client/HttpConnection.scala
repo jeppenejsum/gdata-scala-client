@@ -209,12 +209,10 @@ class HttpConnection(val underlying: HttpURLConnection) {
         ab.toList
       }
 
-      import collection.JavaConversions.asMap
+      import collection.JavaConversions._
       val res: mutable.Map[String, List[String]] = new mutable.HashMap
-
-      for ((key, headers) <- underlying.getHeaderFields if key ne null)
-        res(key) = toScalaList(headers)
-
+      for ((key, headers) <- underlying.getHeaderFields.iterator if key ne null)
+      	res(key) = toScalaList(headers)
       res
     }
     
