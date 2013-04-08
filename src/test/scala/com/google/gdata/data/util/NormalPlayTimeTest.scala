@@ -56,6 +56,6 @@ class NormalPlayTimeTest {
   }
 }
 
-object TimeTest extends NormalPlayTimeTest with Application {
+object TimeTest extends NormalPlayTimeTest with App {
   testHour2
 }

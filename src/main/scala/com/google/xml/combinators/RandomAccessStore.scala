@@ -59,7 +59,7 @@ class RandomAccessStore(myAttrs: MetaData, myNodes: Seq[Node],
    */
   override def acceptElem(label: String, uri: String): (Option[Node], RandomAccessStore) = {
     for (elems <- nodeMap.get(label);
-         val entry <- elems)
+         entry <- elems)
       entry.n match {
         case e: Elem if (e.namespace == uri) => 
           nodeMap.removeBinding(label, entry)

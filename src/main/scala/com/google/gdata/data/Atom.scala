@@ -22,8 +22,8 @@ import com.google.gdata.data.util.DateTime
 
 /** A text construct, according to the Atom specification. The content is uninterpreted. */
 case class Text(tpe: Option[String],
-                content: String) extends Tuple2(tpe, content) {
-  
+                content: String) //extends Tuple2(tpe, content) 
+                {
   /** A convenience constructor for plain text. */
   def this(content: String) = {
     this(None, content)
@@ -36,7 +36,7 @@ object NoText extends Text(None, "")
 /** A person construct, according to the Atom specification. */
 case class Person(name: String,
                   uri: Option[String],
-                  email: Option[String]) extends Tuple3(name, uri, email) with HasStore
+                  email: Option[String]) extends /*Tuple3(name, uri, email) with*/ HasStore
 
 /**
  * This object defines common Atom constructs. 
@@ -50,16 +50,23 @@ object Atom {
   /**
    * Return a pickler for an element that is a text construct.
    */
+  import com.google.xml.combinators._
   def atomText(elemName: String): Pickler[Text] =
     (wrap (elem(elemName, opt(attr("type",  text)) ~ text))
-          (Text) (tuple2Pair))
+          (Text) (tuple2Pair2))
+
+  //def tuple2Pair2(p: (Option[String], String)) = new ~(p._1, p._2)
+  def tuple2Pair2(p: Text) = new ~(p.tpe,p.content)
           
   /** Return a pickler for an element that is a person construct. */
   def atomPerson(elemName: String): Pickler[Person] = elem(elemName,
     makeExtensible(wrap (interleaved(elem("name", text)
         ~ opt(elem("uri", text))
-        ~ opt(elem("email", text)))) (Person) (tuple3Pair)))
+        ~ opt(elem("email", text)))) (Person) (tuple3Pair2)))
 
+  /*Tuple3(name, uri, email) with*/
+  def tuple3Pair2(p: Person) = new ~(p.name, p.uri) ~ p.email
+  
   /** 
    * Return a pickler for a date time in Atom format (RFC 3339). Atom common
    * attributes (xml:base and xml:lang) are ignored.
